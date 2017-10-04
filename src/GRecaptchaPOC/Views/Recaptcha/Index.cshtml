@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Recaptcha";
+}
+<form onsubmit="return false;" method="POST">
+    <div class="g-recaptcha" data-sitekey="@Startup.Configuration["GRecaptcha:SiteKey"]"></div>
+    <br />
+    <button javascript="void(0)" id="btn-submit">Submit</button>
+</form>
+
+<script>
+    $('#btn-submit').click(function () {
+        var recaptchaResponse = grecaptcha.getResponse();
+        if (!recaptchaResponse) {
+            alert('Preencha o recaptcha');
+            return;
+        }
+
+        $.post('/Recaptcha/PostData', { Response: recaptchaResponse, Value: 'Value123' }, function (data) {
+            alert(data.success ? 'Recaptcha validado com sucesso!' : 'Recaptcha ou configurações invalidas!');
+        });
+    });
+</script>
